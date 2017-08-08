@@ -1,23 +1,35 @@
 // Include React
-var React = require("react");
+// var React = require("react");
+import React from "react";
 // helpers api
 var helpers = require("../utils/helpers");
+// import helpers from "../utils/helpers";
 
 // This is the History component. It will be used to show a log of  recent searches.
-var SavedArticle = React.createClass({
-
-  getInitialState: function() {
+// var SavedArticle = React.createClass({ // old
+class SavedArticle extends React.Component { // new
+  /*
+  getInitialState() {
     return { result:[] };
-  },
+  }
+  */
 
-  handleDelete: function(event) {
+  constructor(props) {
+    super(props);
+    this.state = {
+      result: [],
+    };
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  handleDelete(event) {
     event.preventDefault();
     this.props.handleDeleteSavedArticle(this.props.savedArticleInfo);
-  },
+  }
 
   // Here we describe this component's render method
   // article info prop from main related to returned results
-  render: function() {
+  render() {
     return (  
       <div>
         <a target="_blank" href={this.props.savedArticleInfo.url}>{this.props.savedArticleInfo.title}</a>
@@ -26,7 +38,9 @@ var SavedArticle = React.createClass({
       </div>
     );
   }
-});
+// });
+}
 
 // Export the component back for use in other files
-module.exports = SavedArticle;
+// module.exports = SavedArticle; // old
+export default SavedArticle; // new

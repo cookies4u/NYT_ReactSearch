@@ -1,47 +1,80 @@
 // Include React
-var React = require("react");
+// var React = require("react");
+import React from "react";
 // helpers api
 var helpers = require("../utils/helpers");
+// import helpers from "../utils/helpers";
+
 
 // Creating the Form component
-var Form = React.createClass({
+// var Form = React.createClass({ // old
+class Form extends React.Component { // new
 
   // Here we set a generic state associated with the text being searched for
-  getInitialState: function() {
+  /*
+  getInitialState() {
     return { term: "", begin_date: "", end_date: "" };
-  },
+  }
+  */
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      term: "",
+      begin_date: "",
+      end_date: ""
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleBeginDateChange = this.handleBeginDateChange.bind(this);
+    this.handleEndDateChange = this.handleEndDateChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
 
   // This function will respond to the user input
-  handleChange: function(event) {
-    console.log("term: " + event.target.value);
-    this.setState({ term: event.target.value });
-  },
+  handleChange(event) {
+    var newState = {};
+    newState[event.target.id] = event.target.value;
+    console.log("term: ", event.target.value);
+    this.setState(newState);
+
+    // this.setState({ term: event.target.value });
+  }
 
   // This function will respond to the user input
-  handleBeginDateChange: function(event) {
+  handleBeginDateChange(event) {
+    
+    var newState = {};
+    newState[event.target.id] = event.target.value;  
     console.log("Begin Date" + event.target.value);
-    this.setState({ begin_date: event.target.value });
-  },
+    this.setState(newState);
+
+    // this.setState({ begin_date: event.target.value });
+  }
 
   // This function will respond to the user input
-  handleEndDateChange: function(event) {
+  handleEndDateChange(event) {
+    var newState = {};
+    newState[event.target.id] = event.target.value;
     console.log("End Date: " + event.target.value);
-    this.setState({ end_date: event.target.value });
-  },
+    this.setState(newState);
+    
+    // this.setState({ end_date: event.target.value });
+  }
 
   // When a user submits
-  handleSubmit: function(event) {
+  handleSubmit(event) {
     // prevent the HTML from trying to submit a form if the user hits "Enter" instead of
     // clicking the button
     event.preventDefault();
 
     // Set the parent to have the search term
-    console.log(this.state.begin_date);
+    console.log("state begin date ", this.state.begin_date);
     this.props.setTerm(this.state.term, this.state.begin_date, this.state.end_date);
     this.setState({ term: "", begin_date: "", end_date: "" });
-  },
+  }
   // Here we describe this component's render method. this component is only for the form. The results are a different component after user hits submit
-  render: function() {
+  render() {
     return (
       <div className="panel panel-default">
         <div className="panel-heading" id="formHeader">
@@ -106,7 +139,9 @@ var Form = React.createClass({
       </div>
     );
   }
-});
+//});
+}
 
 // Export the component back for use in other files
-module.exports = Form;
+// module.exports = Form; // old
+export default Form; // new

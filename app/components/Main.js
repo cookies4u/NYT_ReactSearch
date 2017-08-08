@@ -1,21 +1,50 @@
 // Include React
-var React = require("react");
+//var React = require("react");
+import React from "react";
 
 // include all of the sub-components
+/*
 var Form = require("./children/Form");
 var Results = require("./children/Results");
 var SavedArticle = require("./children/SavedArticle");
+*/
+
+import Form from "./children/Form";
+import Results from "./children/Results";
+import SavedArticle from "./children/SavedArticle";
+
 
 // Helper for making AJAX requests to our API
 var helpers = require("./utils/helpers");
+// import helpers from "../utils/helpers";
 
 // Creating the Main component
-var Main = React.createClass({
+// var Main = React.createClass({ // old
+class Main extends React.Component { // new
 
   // initial states set user inputs and returned results
-  getInitialState: function() {
+  /*
+  getInitialState() {
     return { searchTerm: "", searchBegindate:"", searchEnddate:"", results: [], savedArticls: [] };
-  },
+  }
+  */
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchTerm: "",
+      searchBegindate: "", 
+      searchEnddate:"", 
+      results: [], 
+      savedArticls: []
+    };
+    this.setTerm = this.setTerm.bind(this);
+    this.getSavedArticles = this.getSavedArticles.bind(this);
+    this.handleDeleteSavedArticle = this.handleDeleteSavedArticle.bind(this);
+    // this.componentDidUpdate = this.componentDidUpdate.bind(this);
+    this.removeResult = this.removeResult.bind(this);
+  }
+
 
   // may resole save issue
   // The moment the page renders get saved articles 
@@ -28,35 +57,35 @@ var Main = React.createClass({
         this.setState({ savedArticls: response.data });
       }
     }.bind(this));
-  },
+  }
 
-  handleDeleteSavedArticle: function(article) {
+  handleDeleteSavedArticle(article) {
       helpers.deleteSaved(article._id).then(function(data) {
         this.getSavedArticles();
       }.bind(this));
-  },
+  }
 
   // If the component changes (i.e. if a search is entered)
-  componentDidUpdate: function() {
+  componentDidUpdate() {
    if (this.state.searchTerm !== "") {
       var obj = {      
         term: this.state.searchTerm,
         begin_date: this.state.searchBegindate,
         end_date: this.state.searchEnddate
       };
-    console.log(obj);
+    console.log("obj ", obj);
       // Run the query for the search criteria
       helpers.runQuery(obj).then(function(data) {
         if (data !== this.state.results) {
-          console.log("Address", data);
+          console.log("Address xx ", data);
           this.setState({ results: data });
         } 
       }.bind(this));
       this.setState({searchTerm: ""});
    } 
-  },
+  }
 
-  removeResult: function(url) {
+  removeResult(url) {
     let indexToRemove = -1
     for (let i = 0; i < this.state.results.length; i++) {
       if (this.state.results[i].url === url) {
@@ -66,21 +95,21 @@ var Main = React.createClass({
     this.state.results.splice(indexToRemove, 1)
     this.setState({ results: this.state.results})
     this.getSavedArticles();
-  },
+  }
   // This function allows childrens to update the parent.
-  setTerm: function(term, begin_date, end_date) {
-    console.log(term);
+  setTerm(term, begin_date, end_date) {
+    console.log("setTerm term ", term);
     this.setState({ searchTerm: term });
 
-    console.log(begin_date);
+    console.log("setTerm begin_date ", begin_date);
     this.setState({ searchBegindate: begin_date });
 
-    console.log(end_date);
+    console.log("setTerm end_date ", end_date);
     this.setState({ searchEnddate: end_date });
-  },
+  }
 
   // render the function
-  render: function() {
+  render() {
     return (
       <div className="container">
         <div className="row">
@@ -129,7 +158,9 @@ var Main = React.createClass({
       </div>
     );
   }
-});
+// });
+}
 
 // Export the component back for use in other files
-module.exports = Main;
+// module.exports = Main; // old
+export default Main; // new
